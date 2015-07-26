@@ -2,18 +2,31 @@
 //
 
 #include "stdafx.h"
-#include <vector>
 
+struct position {
+	int x;
+	int y;
 
-class Cell {
+	bool operator==(const position& rhs) const
+	{
+		return (x == rhs.x) && (y == rhs.y);
+	}
+
+};
+
+class Molecule {
 public:
-	Cell() {};
-	~Cell() {};
+	Molecule() {};
+	~Molecule() {};
 
 	bool exists_ = false;
+	position location_;
+
+};
+
+class Cell: public Molecule {
+public:
 	bool alive_ = false;
-	int x_location_;
-	int y_location_;
 
 	int energy() const { return energy_; }
 
@@ -29,15 +42,8 @@ private:
 
 };
 
-class Food {
+class Food: public Molecule {
 public:
-	Food() {};
-	~Food() {};
-
-	bool exists_ = false;
-	int x_location_;
-	int y_location_;
-
 	int energy() const { return energy_; }
 
 private:
@@ -48,9 +54,10 @@ private:
 struct Dish {
 public:
 	Dish(int grid_size){ }
-	std::vector<int, int> heat_grid_;
-	std::vector<int, int> light_grid_;
+	position heat_grid_;
+	position light_grid_;
 };
+
 
 int main()
 {
@@ -75,16 +82,16 @@ int main()
 		population[i].alive_ = true;
 
 		// set locations
-		population[i].x_location_ = rand() % kGridSize;
-		population[i].y_location_ = rand() % kGridSize;
+		population[i].location_.x = rand() % kGridSize;
+		population[i].location_.y = rand() % kGridSize;
 
 	}
 
 	for (unsigned int j = 0; total_food; j++) {
 		supply[j].exists_ = true;
 		
-		supply[j].x_location_ = rand() % kGridSize;
-		supply[j].y_location_ = rand() % kGridSize;
+		supply[j].location_.x = rand() % kGridSize;
+		supply[j].location_.y = rand() % kGridSize;
 	}
 
 	bool exit = false;
@@ -97,7 +104,7 @@ int main()
 
 				// consume
 				for (unsigned int j = 0; j < total_food; j++) {
-					if ((population[i].x_location_ == supply[j].x_location_) && (population[i].y_location_ == supply[j].y_location_)) {
+					if (population[i].location_ == supply[j].location_) {
 						population[i].consume(supply[j].energy());
 
 					}
