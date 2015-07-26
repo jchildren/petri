@@ -15,6 +15,8 @@ public:
 	int x_location_;
 	int y_location_;
 
+	int energy() const { return energy_; }
+
 	void move() {};
 	void consume(int energy) {};
 	void reproduce() {};
