@@ -2,9 +2,11 @@
 //
 
 #include "stdafx.h"
+#include <windows.h>
 #include <stdlib.h>
 #include <vector>
 #include <iostream>
+
 
 struct position {
 	int x;
@@ -63,14 +65,17 @@ public:
 
 Cell::Cell() {
 	size_ = 10 + rand() % 10;
-	metabolism_ = rand() % 10;
+	metabolism_ = rand() % 2;
+	move_delay_ = 1;
 }
 
 void Cell::move() {
-	energy_ = energy_ - metabolism_;
 
-	if (move_delay_ = 0) {
-		int direction = rand() % 4;
+	int direction = 0;
+
+	if (move_delay_ == 0) {
+		energy_ = energy_ - metabolism_;
+		direction = rand() % 4;
 
 		if (direction == 0) {
 			location_.x = location_.x + 1;
@@ -85,12 +90,11 @@ void Cell::move() {
 			location_.y = location_.y - 1;
 		}
 
-		move_delay_ = size_ - metabolism_;
+		move_delay_ = 4 - metabolism_;
 	}
 	else {
 		move_delay_ = move_delay_ - 1;
 	}
-
 }
 
 
@@ -100,9 +104,9 @@ int main()
 	std::vector<int> consumed_food;
 	
 	// initialise
-	const unsigned int kGridSize = 50;
+	const unsigned int kGridSize = 25;
 
-	const unsigned int kPopulationMax = 10;
+	const unsigned int kPopulationMax = 15;
 	const unsigned int kFoodMax = 50;
 
 	const unsigned int kReproduceEnergy = 200;
@@ -114,10 +118,10 @@ int main()
 	Food supply[kFoodMax];
 	Dish petri(kGridSize);
 
-	unsigned int total_population = 10;
-	unsigned int total_food = 50;
+	unsigned int total_population = 15;
+	unsigned int total_food = 30;
 
-	for (unsigned int i = 0; i < total_population; i++) {
+	for (unsigned int i = 0; i <= total_population; i++) {
 		// set alive
 		population[i].exists_ = true;
 		population[i].alive_ = true;
@@ -126,6 +130,8 @@ int main()
 		population[i].location_.x = rand() % kGridSize;
 		population[i].location_.y = rand() % kGridSize;
 
+		population[i].energy_ = kCellStartEnergy;
+
 	}
 
 	for (unsigned int j = 0; j < total_food; j++) {
@@ -133,12 +139,14 @@ int main()
 		
 		supply[j].location_.x = rand() % kGridSize;
 		supply[j].location_.y = rand() % kGridSize;
+
+		supply[j].energy_ = rand() % kMaxFoodEnergy;
 	}
 
 	bool exit = false;
 	unsigned int w = 1;
 
-	while (w < 100) {
+	while (w < 50) {
 		for (unsigned int i = 0; i < total_population; i++) {
 			if (population[i].alive_ == true) {
 				// move
@@ -149,6 +157,7 @@ int main()
 					if (population[i].location_ == supply[j].location_) {
 						population[i].consume(supply[j].energy_, 1);
 						supply[j].exists_ = false;
+						consumed_food.push_back(j);
 					}
 				}
 
@@ -156,7 +165,7 @@ int main()
 					if (j == i) {
 						continue;
 					}
-					else if ((population[i].size() > population[j].size()) || (population[j].alive_ = false)) {
+					else if ((population[i].size() > population[j].size()) || (population[j].alive_ == false)) {
 						population[i].consume(population[j].energy_, population[j].size());
 						population[j].exists_ = false;
 						population[j].alive_ = false;
@@ -186,22 +195,48 @@ int main()
 
 		// display grid
 
+
 		for (unsigned int i = 0; i < kGridSize; i++) {
-			for (unsigned int j = 0; j < kGridSize; j++) {
+			for (unsigned int j = 0; j < kGridSize; j++) { 
+				bool occupied = false;
+				position display_location;
+				display_location.x = i;
+				display_location.y = j;
 				for (unsigned int k = 0; k < kPopulationMax; k++) {
-					if ((population[k].location_.x == i) && (population[k].location_.y == j)) {
-						std::cout << "+";
+					if ((population[k].location_ == display_location) && (population[k].exists_ == true)) {
+						if (population[k].alive_ == true) {
+							std::cout << "+";
+						}
+						else {
+							std::cout << "-";
+						}
+						occupied = true;
 					}
 				}
 				for (unsigned int k = 0; k < kFoodMax; k++) {
-					if ((supply[k].location_.x == i) && (supply[k].location_.y == j)) {
+					if ((supply[k].location_ == display_location) && (supply[k].exists_ == true)) {
 						std::cout << ".";
+						occupied = true;
 					}
+				}
+				if (occupied == false) {
+					std::cout << " ";
+				}
+				else {
+					occupied = false;
 				}
 
 			}
 			std::cout << "\n";
 		}
+		
+		for (unsigned int i = 0; i < kGridSize; i++) {
+			std::cout << "=";
+		}
+		std::cout << "\n";
+
+		std::cout.flush();
+		Sleep(1000);
 
 		w++;
 	}
