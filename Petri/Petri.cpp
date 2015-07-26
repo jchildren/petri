@@ -165,20 +165,30 @@ int main()
 					if (j == i) {
 						continue;
 					}
-					else if ((population[i].size() > population[j].size()) || (population[j].alive_ == false)) {
-						population[i].consume(population[j].energy_, population[j].size());
-						population[j].exists_ = false;
-						population[j].alive_ = false;
-						consumed_cells.push_back(j);
+					else if (population[i].location_ == population[j].location_){
+						if ((population[i].size() > population[j].size()) || (population[j].alive_ == false)) {
+							population[i].consume(population[j].energy_, population[j].size());
+							population[j].exists_ = false;
+							population[j].alive_ = false;
+							consumed_cells.push_back(j);
+						}
+						else if ((population[j].size() > population[i].size()) || (population[i].alive_ == false)) {
+							population[j].consume(population[i].energy_, population[i].size());
+							population[i].exists_ = false;
+							population[i].alive_ = false;
+							consumed_cells.push_back(i);
+							continue;
+						}
 					}
+
 				}
 
 				// reproduce
 				if ((total_population < kPopulationMax) && (population[i].energy_ >= kReproduceEnergy)) {
 					population[i].reproduce();
-					total_population++;
+					//total_population++;
 				}
-
+	
 				// death
 				if (population[i].energy_ <= 0) {
 					population[i].alive_ = false;
