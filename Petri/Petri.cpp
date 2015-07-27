@@ -34,6 +34,7 @@ public:
 class Cell: public Molecule {
 public:
 	Cell();
+
 	bool alive_ = false;
 
 	int size() const { return size_; }
@@ -65,7 +66,7 @@ public:
 
 Cell::Cell() {
 	size_ = 10 + rand() % 10;
-	metabolism_ = rand() % 2;
+	metabolism_ = rand() % 10;
 	move_delay_ = 1;
 }
 
@@ -90,7 +91,7 @@ void Cell::move() {
 			location_.y = location_.y - 1;
 		}
 
-		move_delay_ = 4 - metabolism_;
+		move_delay_ = 1;
 	}
 	else {
 		move_delay_ = move_delay_ - 1;
@@ -199,7 +200,27 @@ int main()
 
 		}
 
-		// compress locations
+		// compress population into sequential class members
+		for (unsigned int i = 0; i < consumed_cells.size(); i++, total_population--) {
+			// copy
+			population[consumed_cells[i]] = population[total_population];
+			population[total_population].exists_ = false;
+			std::cout << "Cell" << total_population << "no longer exists";
+		}
+
+		// clear the vector to allow size to return to 0
+		consumed_cells.clear();
+
+		// compress population into sequential class members
+		for (unsigned int i = 0; i < consumed_food.size(); i++, total_food--) {
+			// copy
+			supply[consumed_food[i]] = supply[total_food];
+			supply[total_food].exists_ = false;
+		}
+
+		// clear the vector to allow size to return to 0
+		consumed_food.clear();
+
 
 		// poll user input
 
@@ -215,7 +236,7 @@ int main()
 				for (unsigned int k = 0; k < kPopulationMax; k++) {
 					if ((population[k].location_ == display_location) && (population[k].exists_ == true)) {
 						if (population[k].alive_ == true) {
-							std::cout << "+";
+							std::cout << k;
 						}
 						else {
 							std::cout << "-";
