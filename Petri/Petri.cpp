@@ -110,7 +110,7 @@ int main()
 	const unsigned int kPopulationMax = 15;
 	const unsigned int kFoodMax = 50;
 
-	const unsigned int kReproduceEnergy = 200;
+	const unsigned int kReproduceEnergy = 120;
 
 	const unsigned int kCellStartEnergy = 100;
 	const unsigned int kMaxFoodEnergy = 100;
@@ -187,7 +187,11 @@ int main()
 				// reproduce
 				if ((total_population < kPopulationMax) && (population[i].energy_ >= kReproduceEnergy)) {
 					population[i].reproduce();
-					//total_population++;
+					total_population++;
+					population[total_population] = population[i];
+					population[i].energy_ = population[i].energy_ / 2;
+					population[total_population].energy_ = population[total_population].energy_ / 2;
+					population[total_population].move();
 				}
 	
 				// death
@@ -226,7 +230,7 @@ int main()
 
 		// display grid
 
-
+		// TODO: Optimise this horrible loop
 		for (unsigned int i = 0; i < kGridSize; i++) {
 			for (unsigned int j = 0; j < kGridSize; j++) { 
 				bool occupied = false;
@@ -236,7 +240,7 @@ int main()
 				for (unsigned int k = 0; k < total_population; k++) {
 					if (population[k].location_ == display_location) {
 						if (population[k].alive_ == true) {
-							std::cout << k;
+							std::cout << population[k].energy_;
 						}
 						else {
 							std::cout << "-";
