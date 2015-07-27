@@ -234,7 +234,7 @@ int main()
 				display_location.x = i;
 				display_location.y = j;
 				for (unsigned int k = 0; k < total_population; k++) {
-					if ((population[k].location_ == display_location) && (population[k].exists_ == true)) {
+					if (population[k].location_ == display_location) {
 						if (population[k].alive_ == true) {
 							std::cout << k;
 						}
@@ -244,8 +244,8 @@ int main()
 						occupied = true;
 					}
 				}
-				for (unsigned int k = 0; k < kFoodMax; k++) {
-					if ((supply[k].location_ == display_location) && (supply[k].exists_ == true)) {
+				for (unsigned int k = 0; k < total_food; k++) {
+					if (supply[k].location_ == display_location) {
 						std::cout << ".";
 						occupied = true;
 					}
