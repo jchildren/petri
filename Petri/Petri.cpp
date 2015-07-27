@@ -233,7 +233,7 @@ int main()
 				position display_location;
 				display_location.x = i;
 				display_location.y = j;
-				for (unsigned int k = 0; k < kPopulationMax; k++) {
+				for (unsigned int k = 0; k < total_population; k++) {
 					if ((population[k].location_ == display_location) && (population[k].exists_ == true)) {
 						if (population[k].alive_ == true) {
 							std::cout << k;
