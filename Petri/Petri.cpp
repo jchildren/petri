@@ -271,7 +271,7 @@ int main()
 		std::cout << "\n";
 
 		std::cout.flush();
-		Sleep(1000);
+		Sleep(1500);
 
 		w++;
 	}
