@@ -2,102 +2,11 @@
 //
 
 #include "stdafx.h"
-#include <windows.h>
-#include <stdlib.h>
-#include <vector>
-#include <iostream>
+#include "Position.h"
 
-
-struct position {
-	int x;
-	int y;
-
-	bool operator==(const position& rhs) const
-	{
-		return (x == rhs.x) && (y == rhs.y);
-	}
-
-};
-
-class Molecule {
-public:
-	Molecule() {};
-	~Molecule() {};
-
-	bool exists_ = false;
-	position location_;
-	int energy_;
-
-
-};
-
-class Cell: public Molecule {
-public:
-	Cell();
-
-	bool alive_ = false;
-
-	int size() const { return size_; }
-
-	void move();
-	void consume(int energy, int size) { energy_ = energy_ + energy; size_ = size_ + size; };
-	void reproduce() {};
-
-private:
-	int metabolism_;
-	int size_;
-	int move_delay_;
-
-};
-
-class Food: public Molecule {
-public:
-
-private:
-
-};
-
-struct Dish {
-public:
-	Dish(int grid_size){ }
-	position heat_grid_;
-	position light_grid_;
-};
-
-Cell::Cell() {
-	size_ = 10 + rand() % 10;
-	metabolism_ = rand() % 10;
-	move_delay_ = 1;
-}
-
-void Cell::move() {
-
-	int direction = 0;
-
-	if (move_delay_ == 0) {
-		energy_ = energy_ - metabolism_;
-		direction = rand() % 4;
-
-		if (direction == 0) {
-			location_.x = location_.x + 1;
-		}
-		else if (direction == 1) {
-			location_.y = location_.y + 1;
-		}
-		else if (direction == 2) {
-			location_.x = location_.x - 1;
-		}
-		else if (direction == 3) {
-			location_.y = location_.y - 1;
-		}
-
-		move_delay_ = 1;
-	}
-	else {
-		move_delay_ = move_delay_ - 1;
-	}
-}
-
+#include "Cell.h"
+#include "Food.h"
+#include "Dish.h"
 
 int main()
 {
@@ -191,6 +100,7 @@ int main()
 					population[total_population] = population[i];
 					population[i].energy_ = population[i].energy_ / 2;
 					population[total_population].energy_ = population[total_population].energy_ / 2;
+					population[total_population].move_delay_ = 0;
 					population[total_population].move();
 				}
 	
@@ -225,6 +135,15 @@ int main()
 		// clear the vector to allow size to return to 0
 		consumed_food.clear();
 
+		// add new food
+		supply[total_food].exists_ = true;
+
+		supply[total_food].location_.x = rand() % kGridSize;
+		supply[total_food].location_.y = rand() % kGridSize;
+
+		supply[total_food].energy_ = rand() % kMaxFoodEnergy;
+
+		total_food++;
 
 		// poll user input
 
