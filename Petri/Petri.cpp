@@ -13,8 +13,6 @@
 
 int main()
 {
-	std::vector<int> consumed_cells;
-	std::vector<int> consumed_food;
 	
 	// initialise
 	const unsigned int kGridSize = 25;
