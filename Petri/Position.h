@@ -6,7 +6,7 @@ struct position {
 
 	bool operator==(const position& rhs) const
 	{
-		return (x == rhs.x) && (y == rhs.y);
+		return ((x == rhs.x) && (y == rhs.y));
 	}
 
 };

@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Classes">
+      <UniqueIdentifier>{dbe72032-3cb6-4de4-a636-3537bc69d861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Structures">
+      <UniqueIdentifier>{6651c1f2-71d6-4a10-bbbb-79bd1fd61289}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes">
+      <UniqueIdentifier>{10aa2d7f-d48a-45f1-96f4-e717d7f46198}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,20 +33,23 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Molecule.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Cell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Food.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Classes</Filter>
     </ClInclude>
     <ClInclude Include="Dish.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Food.h">
+      <Filter>Header Files\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Molecule.h">
+      <Filter>Header Files\Classes</Filter>
     </ClInclude>
     <ClInclude Include="Position.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Senses.h">
+      <Filter>Header Files\Structures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -47,17 +59,17 @@
     <ClCompile Include="Petri.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Molecule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Cell.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Food.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Classes</Filter>
     </ClCompile>
     <ClCompile Include="Dish.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Food.cpp">
+      <Filter>Source Files\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Molecule.cpp">
+      <Filter>Source Files\Classes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

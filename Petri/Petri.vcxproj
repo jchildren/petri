@@ -148,6 +148,7 @@
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Dish.h" />
     <ClInclude Include="Food.h" />
+    <ClInclude Include="Senses.h" />
     <ClInclude Include="Molecule.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="stdafx.h" />
