@@ -59,6 +59,8 @@ int Cell::add(int grid_size, int energy)
 	location_.x = rand() % grid_size;
 	location_.y = rand() % grid_size;
 
+	reproduce_energy_ = 80 + (rand() % 40);
+
 	energy_ = energy;
 
 	alive_ = true;
@@ -88,4 +90,28 @@ bool Cell::reproduce() {
 	else {
 		return false;
 	}
+}
+
+int Cell::consume_food(Food* food_to_eat, Food* food_to_move) {
+	
+	energy_ = energy_ + food_to_eat->energy(); 
+	size_ = size_ + 1;
+
+	// move and dellocate
+	*food_to_eat = *food_to_move;
+	delete[] food_to_move;
+
+	return 0;
+}
+
+int Cell::consume_cell(Cell* cell_to_eat, Cell* cell_to_move) {
+	
+	energy_ = energy_ + cell_to_eat->energy();
+	size_ = size_ + size_;
+
+	// move and deallocate
+	*cell_to_eat = *cell_to_move;
+	delete[] cell_to_move;
+
+	return 0;
 }

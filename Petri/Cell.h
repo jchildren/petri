@@ -1,5 +1,6 @@
 #pragma once
 #include "Molecule.h"
+#include "Food.h"
 
 class Cell :
 	protected Molecule
@@ -35,6 +36,9 @@ public:
 	int consume(int energy, int size);
 	//
 	bool reproduce();
+
+	int consume_food(Food* food_to_eat, Food* food_to_move);
+	int consume_cell(Cell* cell_to_eat, Cell* cell_to_move);
 
 	/*
 	// Accessor functions
