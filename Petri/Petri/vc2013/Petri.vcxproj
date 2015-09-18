@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -106,9 +107,13 @@
     <ResourceCompile Include="Resources.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Cell.cpp" />
+    <ClCompile Include="..\src\CellController.cpp" />
     <ClCompile Include="..\src\PetriApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\Cell.h" />
+    <ClInclude Include="..\include\CellController.h" />
     <ClInclude Include="..\include\Resources.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
