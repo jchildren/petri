@@ -13,6 +13,6 @@ public:
 	void addCells(int amount);
 	void removeCells(int amount);
 
-	std::list<Cell> cell_list_;
+	std::list<Cell> population_;
 };
 

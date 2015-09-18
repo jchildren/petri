@@ -14,5 +14,7 @@ public:
 
 	void update();
 	void draw();
+	bool can_consume(Cell target);
+	bool within_radius(ci::Vec2f pos);
 };
 
