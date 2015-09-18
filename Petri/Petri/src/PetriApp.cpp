@@ -5,7 +5,7 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-class PetriCinderApp : public AppNative {
+class PetriApp : public AppNative {
   public:
 	void setup();
 	void mouseDown( MouseEvent event );	
@@ -13,22 +13,22 @@ class PetriCinderApp : public AppNative {
 	void draw();
 };
 
-void PetriCinderApp::setup()
+void PetriApp::setup()
 {
 }
 
-void PetriCinderApp::mouseDown( MouseEvent event )
+void PetriApp::mouseDown( MouseEvent event )
 {
 }
 
-void PetriCinderApp::update()
+void PetriApp::update()
 {
 }
 
-void PetriCinderApp::draw()
+void PetriApp::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) ); 
 }
 
-CINDER_APP_NATIVE( PetriCinderApp, RendererGl )
+CINDER_APP_NATIVE( PetriApp, RendererGl )
