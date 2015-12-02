@@ -7,6 +7,7 @@ class Cell :
 {
 public:
 	Cell();
+	Cell(int grid_size, int energy);
 	virtual ~Cell();
 
 private:
@@ -37,8 +38,8 @@ public:
 	//
 	bool reproduce();
 
-	int consume_food(Food* food_to_eat, Food* food_to_move);
-	int consume_cell(Cell* cell_to_eat, Cell* cell_to_move);
+	int consume_food(Food food_to_eat);
+	int consume_cell(Cell cell_to_eat);
 
 	/*
 	// Accessor functions

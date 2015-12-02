@@ -5,6 +5,7 @@ class Food :
 {
 public:
 	Food();
+	Food(int grid_size, int energy);
 	virtual ~Food();
 
 	// Accessor function for energy_

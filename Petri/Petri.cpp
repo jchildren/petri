@@ -12,27 +12,22 @@
 #include "Dish.h"
 
 
-int check_consume_cell(Cell* active_cell, Cell* cell_to_check, Cell* last_cell) {
-	if (active_cell == cell_to_check) {
-		return 0;
+bool can_consume_cell(Cell active_cell, Cell cell_to_check) {
+	if (&active_cell == &cell_to_check) {
+		return false;
 	}
-	else if (active_cell->location() == cell_to_check->location()) {
-		if (active_cell->size() >= cell_to_check->size()) {
-			if (active_cell != last_cell) {
-				active_cell->consume_cell(cell_to_check, last_cell);
-			}
-			else {
-				active_cell->consume(cell_to_check->energy(), cell_to_check->size());
-			}
+	else if (active_cell.location() == cell_to_check.location()) {
+		if (active_cell.size() >= cell_to_check.size()) {
+			active_cell.consume_cell(cell_to_check);
 		}
 		else {
-			cell_to_check->consume_cell(active_cell, last_cell);
+			cell_to_check.consume_cell(active_cell);
 		}
 		// Two cells enter, one cell leaves!
-		return 1;
+		return true;
 	}
 	else {
-		return 0;
+		return false;
 	}
 }
 
@@ -55,19 +50,16 @@ int main()
 	unsigned int total_population = 15;
 	unsigned int total_food = 30;
 
-	Cell *population[kPopulationMax];
+	std::vector<Cell> population;
 
 	for (unsigned int i = 0; i < total_population; i++) {
-		population[i] = new Cell;
-		population[i]->add(kGridSize, kCellStartEnergy);
+		population.push_back(Cell(kGridSize, kCellStartEnergy));
 	}
 
-
-	Food *supply[kFoodMax];
+	std::list<Food> supply;
 
 	for (unsigned int i = 0; i < total_food; i++) {
-		supply[i] = new Food;
-		supply[i]->add(kGridSize, kMaxFoodEnergy);
+		supply.push_back(Food(kGridSize, kMaxFoodEnergy));
 	}
 
 	bool exit = false;
@@ -78,29 +70,26 @@ int main()
 		/*
 		// Process step
 		*/
-		for (unsigned int i = 0; i < total_population; i++) {
-			if (population[i]->alive() == true) {
+		for (auto cell = population.begin(); cell != population.end(); ++cell) {
+			if (cell->alive() == true) {
 				// move
-				population[i]->move(kGridSize);
+				cell->move(kGridSize);
 
-				for (unsigned j = 0; j < total_food; j++) {
-					if (population[i]->location() == supply[j]->location()) {
-						total_food--;
-						population[i]->consume_food(supply[j], supply[total_food]);
-						supply[total_food] = nullptr;
+				for (auto food = supply.begin(); food != supply.end(); ++food) {
+					if (cell->location() == food->location()) {
+						total_food = supply.size();
+						cell->consume_food(*food);
+						food = supply.erase(food);
 					}
 				}
 
-				for (unsigned j = 0; j < total_population; j++) {
-					switch (check_consume_cell(population[i], population[j], population[total_population - 1]))
+				for (auto target = population.begin(); target != population.end(); ++target) {
+					switch (can_consume_cell(*cell, *target))
 					{
-					case 0:
+					case false:
 						continue;
-					case 1:
-						if (i != total_population - 1) {
-							total_population--;
-							population[total_population] = nullptr;
-						}
+					case true:
+						target = population.erase(target);
 						break;
 					default:
 						break;
@@ -109,31 +98,26 @@ int main()
 				
 
 				// reproduce
-				if ((total_population < kPopulationMax) && (population[i]->reproduce())) {
-					population[total_population] = new Cell;
-					*population[total_population] = *population[i];
-					population[i]->set_energy(population[i]->energy() / 2);
-					population[total_population]->set_energy(population[total_population]->energy() / 2);
-					population[total_population]->set_move_delay(0);
-					population[total_population]->move(kGridSize);
+				if ((total_population < kPopulationMax) && (cell->reproduce())) {
+					population.push_back(Cell(kGridSize, cell->energy() / 2));
+					cell->set_energy(cell->energy() / 2);
 
-					total_population++;
+					total_population = population.size();
 				}
 
 
 
 				// death
-				if (population[i]->energy() <= 0) {
-					population[i]->set_alive(false);
+				if (cell->energy() <= 0) {
+					cell->set_alive(false);
 				}
 			}
 		}
 
 		if (total_food < kFoodMax) {
-			supply[total_food] = new Food;
-			supply[total_food]->add(kGridSize, kCellStartEnergy);
+			supply.push_back(Food(kGridSize, kMaxFoodEnergy));
 
-			total_food++;
+			total_food = supply.size();
 		}
 
 		/*
@@ -155,10 +139,10 @@ int main()
 				position display_location;
 				display_location.x = i;
 				display_location.y = j;
-				for (unsigned int k = 0; k < total_population; k++) {
-					if (population[k]->location() == display_location) {
-						if (population[k]->alive() == true) {
-							std::cout << population[k]->energy();
+				for (Cell cell : population) {
+					if (cell.location() == display_location) {
+						if (cell.alive() == true) {
+							std::cout << cell.energy();
 						}
 						else {
 							std::cout << "-";
@@ -166,8 +150,8 @@ int main()
 						occupied = true;
 					}
 				}
-				for (unsigned int k = 0; k < total_food; k++) {
-					if (supply[k]->location() == display_location) {
+				for (Food food : supply) {
+					if (food.location() == display_location) {
 						std::cout << ".";
 						occupied = true;
 					}
@@ -194,15 +178,8 @@ int main()
 		w++;
 	}
 
-	// clean up memory
-	for (unsigned int i = 0; i < total_population; i++) {
-		delete[] population[i];
-	}
-
-	for (unsigned int i = 0; i < total_food; i++) {
-		delete[] supply[i];
-	}
-	
+	population.clear();
+	supply.clear();
 	
 	return 0;
 }

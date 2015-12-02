@@ -15,6 +15,30 @@ Cell::Cell()
 	reproduce_energy_ = 120;
 }
 
+Cell::Cell(int grid_size, int energy)
+	: reproduce_energy_(0)
+	, size_(0)
+	, alive_(false)
+	, metabolism_(0)
+	, move_delay_(0)
+{
+	size_ = 10 + rand() % 10;
+	metabolism_ = rand() % 10;
+	move_delay_ = 1;
+	reproduce_energy_ = 120;
+
+
+	// set locations
+	location_.x = rand() % grid_size;
+	location_.y = rand() % grid_size;
+
+	reproduce_energy_ = 80 + (rand() % 40);
+
+	energy_ = energy;
+
+	alive_ = true;
+}
+
 
 Cell::~Cell()
 {
@@ -92,26 +116,18 @@ bool Cell::reproduce() {
 	}
 }
 
-int Cell::consume_food(Food* food_to_eat, Food* food_to_move) {
+int Cell::consume_food(Food food_to_eat) {
 	
-	energy_ = energy_ + food_to_eat->energy(); 
+	energy_ = energy_ + food_to_eat.energy(); 
 	size_ = size_ + 1;
-
-	// move and dellocate
-	*food_to_eat = *food_to_move;
-	delete[] food_to_move;
 
 	return 0;
 }
 
-int Cell::consume_cell(Cell* cell_to_eat, Cell* cell_to_move) {
+int Cell::consume_cell(Cell cell_to_eat) {
 	
-	energy_ = energy_ + cell_to_eat->energy();
+	energy_ = energy_ + cell_to_eat.energy();
 	size_ = size_ + size_;
-
-	// move and deallocate
-	*cell_to_eat = *cell_to_move;
-	delete[] cell_to_move;
 
 	return 0;
 }
